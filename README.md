@@ -1,4 +1,5 @@
-Projekat iz Algoritama
+# Sqlator
+> Projekat iz predmeta Algoritmi
 
 Jednostavan editor SQLite baze podataka koji moze kreirati i uredjivati baze, gde
 takodje moze uredjivati same podatke u kreiranim kolonama.
