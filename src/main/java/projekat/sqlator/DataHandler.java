@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class DataHandler
 {
@@ -121,10 +123,10 @@ public class DataHandler
      * @param table name of the table youre getting fields from
      * @return the resulting ArrayList of strings containing field names
      */
-    public static ArrayList<String> getFields(String path, String table)
+    public static Vector<String> getFields(String path, String table)
     {
         String sql = "PRAGMA table_info(" + table + ");";
-        ArrayList<String> result = new ArrayList<>();
+        Vector<String> result = new Vector<>();
         
         try (Connection conn = DriverManager.getConnection(URL_PREFIX + path); Statement statement = conn.createStatement())
         {
@@ -133,9 +135,6 @@ public class DataHandler
             while (rs.next())
             {
                 result.add(rs.getString("name"));
-                //System.out.println(rs.getString("type"));
-                //System.out.println(rs.getBoolean("notnull"));
-                //System.out.println(rs.getBoolean("pk"));
             }
         }
         catch (SQLException e)
@@ -147,26 +146,43 @@ public class DataHandler
         return result;
     }
     
-    public static void selectAll(String path, String table)
+    /**
+     * Selects all rows from a given table
+     * @param path path to the database file
+     * @param table name of the table you're selecting from
+     * @return A 2D Matrix vector, where each row is inside a vector object
+     */
+    public static Vector<Vector<Object>> selectAll(String path, String table)
     {
         String sql = "SELECT * FROM " + table;
         
         try (Connection conn = DriverManager.getConnection(URL_PREFIX + path); Statement statement = conn.createStatement())
         {
             ResultSet rs = statement.executeQuery(sql);
-
+            Vector<Vector<Object>> selectionResult = new Vector<Vector<Object>>();
+            
+            int i = 1;
             while (rs.next())
             {
-                //System.out.println(rs.get);
-                //rs.getInt or whatever, potrebno da se prodje kroz sve kolone i uzeti podatke iz baze
-                // reference ovaj link https://www.sqlitetutorial.net/sqlite-java/select/
-                // get all columns, loop trough them
+                ResultSetMetaData meta = rs.getMetaData();
+                int columnCount = meta.getColumnCount();
+                Vector<Object> row = new Vector();
+                
+                for (int j = 1; j <= columnCount; j++)
+                {
+                    row.add(rs.getObject(j));
+                }
+
+                selectionResult.add(row);
+                i++;
             }
+            
+            return selectionResult;
         }
         catch (SQLException e)
         {
-            System.out.println("getTables:" + e.toString());
-            //return null;
+            System.out.println("selectAll:" + e.toString());
+            return null;
         }
     }
 }

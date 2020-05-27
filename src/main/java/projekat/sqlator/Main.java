@@ -8,9 +8,12 @@ package projekat.sqlator;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.event.TreeSelectionEvent;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import projekat.sqlator.DataHandler;
@@ -66,6 +69,7 @@ public class Main extends javax.swing.JFrame {
         MenuBar = new javax.swing.JMenuBar();
         jMenu_File = new javax.swing.JMenu();
         jMenu_Edit = new javax.swing.JMenu();
+        jMenu_View = new javax.swing.JMenu();
         jMenu_Help = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -80,14 +84,11 @@ public class Main extends javax.swing.JFrame {
         jTable_DatabaseContent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String []
             {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane1.setViewportView(jTable_DatabaseContent);
@@ -103,7 +104,7 @@ public class Main extends javax.swing.JFrame {
         );
         Panel_WorkAreaLayout.setVerticalGroup(
             Panel_WorkAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
             .addComponent(jScrollPane1)
         );
 
@@ -211,6 +212,9 @@ public class Main extends javax.swing.JFrame {
 
         jMenu_Edit.setText("Edit");
         MenuBar.add(jMenu_Edit);
+
+        jMenu_View.setText("View");
+        MenuBar.add(jMenu_View);
 
         jMenu_Help.setText("Help");
         MenuBar.add(jMenu_Help);
@@ -329,7 +333,7 @@ public class Main extends javax.swing.JFrame {
         switch (selectedNode.getDepth())
         {
             case 1:     // selected a table
-
+                fillTableContents(selectedNode.getUserObject().toString());
                 break;
             case 2:     // selected a field
                 
@@ -342,7 +346,9 @@ public class Main extends javax.swing.JFrame {
     private void openDatabase(String path)
     {
         WORKING_PATH = path;
+        
         fillTableView();
+        
         Label_Status.setText(path);
         Button_CloseDatabase.setEnabled(true);
         Button_NewTable.setEnabled(true);
@@ -353,7 +359,10 @@ public class Main extends javax.swing.JFrame {
     private void closeDatabase()
     {
         WORKING_PATH = null;
+
         clearTableView();
+        clearTableContents();
+
         Label_Status.setText(null);
         Button_CloseDatabase.setEnabled(false);
         Button_NewTable.setEnabled(false);
@@ -366,6 +375,24 @@ public class Main extends javax.swing.JFrame {
         root.setUserObject("Open a datbase");
     }
     
+    /**
+     * Fills the JTable with the contents of the selected table
+     */
+    private void fillTableContents(String tableName)
+    {
+        Vector<Vector<Object>> tableContent = DataHandler.selectAll(WORKING_PATH, tableName);
+        JTable table = new JTable(tableContent, DataHandler.getFields(WORKING_PATH, tableName));
+        jTable_DatabaseContent.setModel(table.getModel());
+    }
+    
+    private void clearTableContents()
+    {
+        jTable_DatabaseContent.setModel(new DefaultTableModel());
+    }
+    
+    /**
+     * Fills the JTree with a preview of the open databases tables and columns
+     */
     private void fillTableView()
     {
         DefaultTreeModel model = (DefaultTreeModel) Tree_Table.getModel();
@@ -382,7 +409,7 @@ public class Main extends javax.swing.JFrame {
             DefaultMutableTreeNode tableNameNode = new DefaultMutableTreeNode(array.get(i));
             model.insertNodeInto(tableNameNode, root, root.getChildCount());
            
-            ArrayList<String> fields = DataHandler.getFields(WORKING_PATH, array.get(i));
+            Vector<String> fields = DataHandler.getFields(WORKING_PATH, array.get(i));
             for (int j = 0; j < fields.size(); j++)
             {
                 model.insertNodeInto(new DefaultMutableTreeNode(fields.get(j)), tableNameNode, tableNameNode.getChildCount());
@@ -392,6 +419,9 @@ public class Main extends javax.swing.JFrame {
         model.reload();
     }
     
+    /**
+     * Clears the JTree of its contents
+     */
     private void clearTableView()
     {
         DefaultTreeModel model = (DefaultTreeModel) Tree_Table.getModel();
@@ -450,6 +480,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu_Edit;
     private javax.swing.JMenu jMenu_File;
     private javax.swing.JMenu jMenu_Help;
+    private javax.swing.JMenu jMenu_View;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
