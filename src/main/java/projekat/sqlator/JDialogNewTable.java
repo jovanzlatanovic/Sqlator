@@ -5,6 +5,7 @@
  */
 package projekat.sqlator;
 
+import java.util.Vector;
 import javax.swing.JComboBox;
 import javax.swing.table.TableColumn;
 import javax.swing.DefaultCellEditor;
@@ -23,12 +24,13 @@ public class JDialogNewTable extends javax.swing.JDialog
 
     private SqlTable sqlTable = new SqlTable("TableName");
     private String WORKING_PATH;
+    private boolean modifyTableMode;
     private int fieldCounter = 0;
     
     /**
      * Creates new form JDialogNewTable
      */
-    public JDialogNewTable(java.awt.Frame parent, boolean modal, String working_path)
+    public JDialogNewTable(java.awt.Frame parent, boolean modal, String working_path, boolean modifyTableMode, String tableToModify)
     {
         super(parent, modal);
         initComponents();
@@ -37,6 +39,37 @@ public class JDialogNewTable extends javax.swing.JDialog
         addComboBoxToTable();
         
         this.WORKING_PATH = working_path;
+        this.modifyTableMode = modifyTableMode;
+        
+        // Modify table:
+        // get information of an existing table
+        // fill conttents of the table dialog
+        // when ok is pressed drop the existing table and create the new table
+        
+        if (modifyTableMode)
+        {
+            sqlTable.setName(tableToModify);
+            TextField_TableName.setText(tableToModify);
+            TextField_TableName.setEnabled(false);
+            Button_CreateTable.setText("Apply changes");
+            this.setTitle("Modify table");
+            
+            JOptionPane.showMessageDialog(this, "Modifying a table doesn't yet support retaining auto increment and unique values.\nThe modify table dialog will open with those options set as false even if they are true.");
+            Vector<SqlTableField> fields = DataHandler.getFields(WORKING_PATH, tableToModify);
+            
+            DefaultTableModel model = (DefaultTableModel) Table_Fields.getModel();
+            for (int i = 0; i < fields.size(); i++)
+            {
+                fieldCounter += 1;
+                
+                SqlTableField field = fields.get(i);
+                sqlTable.addField(field);
+                
+                model.addRow(new Object[]{field.getName(), field.getType().toString(), field.isNotNull(), field.isPrimaryKey(), field.isAutoIncrement(), field.isUnique()});
+            }
+            
+            refreshSqlPreview();
+        }
         
         Table_Fields.getModel().addTableModelListener((TableModelEvent e) ->
         {
@@ -278,14 +311,28 @@ public class JDialogNewTable extends javax.swing.JDialog
 
     private void Button_CreateTableActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_CreateTableActionPerformed
     {//GEN-HEADEREND:event_Button_CreateTableActionPerformed
+        String message = "Created table successfully.";
+        
+        if (modifyTableMode)
+        {
+            int result = JOptionPane.showConfirmDialog(this, "Modifying a table's structure will permanently delete any data from that table.\nAre you sure you want to continue? This action cannot be undone.", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(result == JOptionPane.YES_OPTION)
+            {
+                DataHandler.dropTable(WORKING_PATH, sqlTable.getName());
+                message = "Updated table successfully. Previous table data has been lost.";
+            }
+            else
+                return;
+        }
+        
         if (DataHandler.createTable(WORKING_PATH, TextArea_SqlPreview.getText()))
         {
-            JOptionPane.showMessageDialog(rootPane, "Created table successfully");
+            JOptionPane.showMessageDialog(rootPane, message);
             closeForm();
         }
         else
         {
-            JOptionPane.showMessageDialog(rootPane, "Error creating table");
+            JOptionPane.showMessageDialog(rootPane, "Error creating table.");
         }
     }//GEN-LAST:event_Button_CreateTableActionPerformed
 
@@ -386,7 +433,7 @@ public class JDialogNewTable extends javax.swing.JDialog
         {
             public void run()
             {
-                JDialogNewTable dialog = new JDialogNewTable(new javax.swing.JFrame(), true, "");
+                JDialogNewTable dialog = new JDialogNewTable(new javax.swing.JFrame(), true, "", false, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter()
                 {
                     @Override

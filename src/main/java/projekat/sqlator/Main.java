@@ -36,7 +36,8 @@ public class Main extends javax.swing.JFrame {
         Tree_Table.addTreeSelectionListener((TreeSelectionEvent e) ->
         {
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) Tree_Table.getLastSelectedPathComponent();
-            handleTreeSelect(selectedNode);
+            if (checkTableSelected(selectedNode))
+                fillTableContents(selectedNode.getUserObject().toString());
         });
     }
 
@@ -55,17 +56,21 @@ public class Main extends javax.swing.JFrame {
         Tree_Table = new javax.swing.JTree();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_DatabaseContent = new javax.swing.JTable();
-        ToolBar = new javax.swing.JToolBar();
+        ToolBar_Database = new javax.swing.JToolBar();
         Button_NewDatabase = new javax.swing.JButton();
         Button_OpenDatabase = new javax.swing.JButton();
         Button_CloseDatabase = new javax.swing.JButton();
-        statusBar = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
-        Label_Status = new javax.swing.JLabel();
-        jToolBar1 = new javax.swing.JToolBar();
+        ToolBar_Table = new javax.swing.JToolBar();
         Button_NewTable = new javax.swing.JButton();
         Button_ModifyTable = new javax.swing.JButton();
         Button_deleteTable = new javax.swing.JButton();
+        ToolBar_TableData = new javax.swing.JToolBar();
+        Button_NewRow = new javax.swing.JButton();
+        Button_DeleteRow = new javax.swing.JButton();
+        Button_WriteData = new javax.swing.JButton();
+        statusBar = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
+        Label_Status = new javax.swing.JLabel();
         MenuBar = new javax.swing.JMenuBar();
         jMenu_File = new javax.swing.JMenu();
         jMenu_Edit = new javax.swing.JMenu();
@@ -100,15 +105,15 @@ public class Main extends javax.swing.JFrame {
             .addGroup(Panel_WorkAreaLayout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 506, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE))
         );
         Panel_WorkAreaLayout.setVerticalGroup(
             Panel_WorkAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
-        ToolBar.setRollover(true);
+        ToolBar_Database.setRollover(true);
 
         Button_NewDatabase.setText("Create new database");
         Button_NewDatabase.addActionListener(new java.awt.event.ActionListener()
@@ -118,7 +123,7 @@ public class Main extends javax.swing.JFrame {
                 Button_NewDatabaseActionPerformed(evt);
             }
         });
-        ToolBar.add(Button_NewDatabase);
+        ToolBar_Database.add(Button_NewDatabase);
 
         Button_OpenDatabase.setText("Open database");
         Button_OpenDatabase.addActionListener(new java.awt.event.ActionListener()
@@ -128,7 +133,7 @@ public class Main extends javax.swing.JFrame {
                 Button_OpenDatabaseActionPerformed(evt);
             }
         });
-        ToolBar.add(Button_OpenDatabase);
+        ToolBar_Database.add(Button_OpenDatabase);
 
         Button_CloseDatabase.setText("Close database");
         Button_CloseDatabase.setEnabled(false);
@@ -142,7 +147,74 @@ public class Main extends javax.swing.JFrame {
                 Button_CloseDatabaseActionPerformed(evt);
             }
         });
-        ToolBar.add(Button_CloseDatabase);
+        ToolBar_Database.add(Button_CloseDatabase);
+
+        ToolBar_Table.setRollover(true);
+
+        Button_NewTable.setText("New Table");
+        Button_NewTable.setEnabled(false);
+        Button_NewTable.setFocusable(false);
+        Button_NewTable.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Button_NewTable.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Button_NewTable.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                Button_NewTableActionPerformed(evt);
+            }
+        });
+        ToolBar_Table.add(Button_NewTable);
+
+        Button_ModifyTable.setText("Modify table");
+        Button_ModifyTable.setEnabled(false);
+        Button_ModifyTable.setFocusable(false);
+        Button_ModifyTable.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Button_ModifyTable.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Button_ModifyTable.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                Button_ModifyTableActionPerformed(evt);
+            }
+        });
+        ToolBar_Table.add(Button_ModifyTable);
+
+        Button_deleteTable.setText("Delete table");
+        Button_deleteTable.setEnabled(false);
+        Button_deleteTable.setFocusable(false);
+        Button_deleteTable.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Button_deleteTable.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Button_deleteTable.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                Button_deleteTableActionPerformed(evt);
+            }
+        });
+        ToolBar_Table.add(Button_deleteTable);
+
+        ToolBar_TableData.setRollover(true);
+
+        Button_NewRow.setText("New row");
+        Button_NewRow.setEnabled(false);
+        Button_NewRow.setFocusable(false);
+        Button_NewRow.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Button_NewRow.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ToolBar_TableData.add(Button_NewRow);
+
+        Button_DeleteRow.setText("Delete row");
+        Button_DeleteRow.setEnabled(false);
+        Button_DeleteRow.setFocusable(false);
+        Button_DeleteRow.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Button_DeleteRow.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ToolBar_TableData.add(Button_DeleteRow);
+
+        Button_WriteData.setText("Write data");
+        Button_WriteData.setEnabled(false);
+        Button_WriteData.setFocusable(false);
+        Button_WriteData.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Button_WriteData.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ToolBar_TableData.add(Button_WriteData);
 
         javax.swing.GroupLayout statusBarLayout = new javax.swing.GroupLayout(statusBar);
         statusBar.setLayout(statusBarLayout);
@@ -163,50 +235,6 @@ public class Main extends javax.swing.JFrame {
                 .addGap(0, 11, Short.MAX_VALUE))
         );
 
-        jToolBar1.setRollover(true);
-
-        Button_NewTable.setText("New Table");
-        Button_NewTable.setEnabled(false);
-        Button_NewTable.setFocusable(false);
-        Button_NewTable.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        Button_NewTable.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        Button_NewTable.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                Button_NewTableActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(Button_NewTable);
-
-        Button_ModifyTable.setText("Modify table");
-        Button_ModifyTable.setEnabled(false);
-        Button_ModifyTable.setFocusable(false);
-        Button_ModifyTable.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        Button_ModifyTable.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        Button_ModifyTable.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                Button_ModifyTableActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(Button_ModifyTable);
-
-        Button_deleteTable.setText("Delete table");
-        Button_deleteTable.setEnabled(false);
-        Button_deleteTable.setFocusable(false);
-        Button_deleteTable.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        Button_deleteTable.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        Button_deleteTable.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                Button_deleteTableActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(Button_deleteTable);
-
         jMenu_File.setText("File");
         MenuBar.add(jMenu_File);
 
@@ -226,21 +254,24 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(statusBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(ToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(ToolBar_Table, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ToolBar_TableData, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Panel_WorkArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(ToolBar_Database, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addComponent(ToolBar_Database, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(ToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ToolBar_Table, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                    .addComponent(ToolBar_TableData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Panel_WorkArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -268,7 +299,7 @@ public class Main extends javax.swing.JFrame {
             
             reply = "Created new database successfully.\n" + path;
             JOptionPane.showMessageDialog(rootPane, reply);
-            JDialogNewTable newTableForm = new JDialogNewTable(this, true, WORKING_PATH);
+            JDialogNewTable newTableForm = new JDialogNewTable(this, true, WORKING_PATH, false, null);
             newTableForm.showDialog();
             openDatabase(path);
         }
@@ -296,13 +327,16 @@ public class Main extends javax.swing.JFrame {
 
     private void Button_NewTableActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_NewTableActionPerformed
     {//GEN-HEADEREND:event_Button_NewTableActionPerformed
-        JDialogNewTable newTableForm = new JDialogNewTable(this, true, WORKING_PATH);
+        JDialogNewTable newTableForm = new JDialogNewTable(this, true, WORKING_PATH, false, null);
         newTableForm.showDialog();
         fillTableView();
     }//GEN-LAST:event_Button_NewTableActionPerformed
 
     private void Button_deleteTableActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_deleteTableActionPerformed
     {//GEN-HEADEREND:event_Button_deleteTableActionPerformed
+        if (!checkTableSelected((DefaultMutableTreeNode) Tree_Table.getLastSelectedPathComponent()))
+            return;
+
         String selectedTable = Tree_Table.getLastSelectedPathComponent().toString();
         int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete table '" + selectedTable + "'?\nAll data and fields inside this table will be lost.", "Delete table", 0);
         
@@ -322,24 +356,32 @@ public class Main extends javax.swing.JFrame {
 
     private void Button_ModifyTableActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_ModifyTableActionPerformed
     {//GEN-HEADEREND:event_Button_ModifyTableActionPerformed
-        // TODO add your handling code here:
+        if (!checkTableSelected((DefaultMutableTreeNode) Tree_Table.getLastSelectedPathComponent()))
+            return;
+        
+        String selectedTable = Tree_Table.getLastSelectedPathComponent().toString();
+        
+        JDialogNewTable modifyTableForm = new JDialogNewTable(this, true, WORKING_PATH, true, selectedTable);
+        modifyTableForm.showDialog();
+        
+        fillTableContents(selectedTable);
+        fillTableView();
     }//GEN-LAST:event_Button_ModifyTableActionPerformed
 
-    private void handleTreeSelect(DefaultMutableTreeNode selectedNode)
+    private boolean checkTableSelected(DefaultMutableTreeNode selectedNode)
     {
         if (selectedNode == null)
-            return;
+            return false;
         
         switch (selectedNode.getDepth())
         {
             case 1:     // selected a table
-                fillTableContents(selectedNode.getUserObject().toString());
-                break;
-            case 2:     // selected a field
+                return true;
+            /*case 2:     // selected a field
                 
-                break;
+                break;*/
             default:
-                return;
+                return false;
         }
     }
     
@@ -381,13 +423,27 @@ public class Main extends javax.swing.JFrame {
     private void fillTableContents(String tableName)
     {
         Vector<Vector<Object>> tableContent = DataHandler.selectAll(WORKING_PATH, tableName);
-        JTable table = new JTable(tableContent, DataHandler.getFields(WORKING_PATH, tableName));
+        Vector<SqlTableField> fields = DataHandler.getFields(WORKING_PATH, tableName);
+        
+        //turn all of sqltablefield.name into string vector of field names
+        Vector<String> fieldNames = new Vector<>();
+        fields.forEach((field) -> fieldNames.add(field.getName()));
+        
+        JTable table = new JTable(tableContent, fieldNames);
         jTable_DatabaseContent.setModel(table.getModel());
+        
+        Button_NewRow.setEnabled(true);
+        Button_DeleteRow.setEnabled(true);
+        Button_WriteData.setEnabled(true);
     }
     
     private void clearTableContents()
     {
         jTable_DatabaseContent.setModel(new DefaultTableModel());
+        
+        Button_NewRow.setEnabled(false);
+        Button_DeleteRow.setEnabled(false);
+        Button_WriteData.setEnabled(false);
     }
     
     /**
@@ -403,16 +459,16 @@ public class Main extends javax.swing.JFrame {
         Path fileName = tempPath.getFileName();
         root.setUserObject(fileName.toString());
         
-        ArrayList<String> array = DataHandler.getTables(WORKING_PATH);
-        for (int i = 0; i < array.size(); i++)
+        ArrayList<String> tableNames = DataHandler.getTables(WORKING_PATH);
+        for (int i = 0; i < tableNames.size(); i++)
         {
-            DefaultMutableTreeNode tableNameNode = new DefaultMutableTreeNode(array.get(i));
+            DefaultMutableTreeNode tableNameNode = new DefaultMutableTreeNode(tableNames.get(i));
             model.insertNodeInto(tableNameNode, root, root.getChildCount());
            
-            Vector<String> fields = DataHandler.getFields(WORKING_PATH, array.get(i));
+            Vector<SqlTableField> fields = DataHandler.getFields(WORKING_PATH, tableNames.get(i));
             for (int j = 0; j < fields.size(); j++)
             {
-                model.insertNodeInto(new DefaultMutableTreeNode(fields.get(j)), tableNameNode, tableNameNode.getChildCount());
+                model.insertNodeInto(new DefaultMutableTreeNode(fields.get(j).getName()), tableNameNode, tableNameNode.getChildCount());
             }
         }
         
@@ -467,15 +523,20 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Button_CloseDatabase;
+    private javax.swing.JButton Button_DeleteRow;
     private javax.swing.JButton Button_ModifyTable;
     private javax.swing.JButton Button_NewDatabase;
+    private javax.swing.JButton Button_NewRow;
     private javax.swing.JButton Button_NewTable;
     private javax.swing.JButton Button_OpenDatabase;
+    private javax.swing.JButton Button_WriteData;
     private javax.swing.JButton Button_deleteTable;
     private javax.swing.JLabel Label_Status;
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JPanel Panel_WorkArea;
-    private javax.swing.JToolBar ToolBar;
+    private javax.swing.JToolBar ToolBar_Database;
+    private javax.swing.JToolBar ToolBar_Table;
+    private javax.swing.JToolBar ToolBar_TableData;
     private javax.swing.JTree Tree_Table;
     private javax.swing.JMenu jMenu_Edit;
     private javax.swing.JMenu jMenu_File;
@@ -485,7 +546,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable_DatabaseContent;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel statusBar;
     // End of variables declaration//GEN-END:variables
 }

@@ -90,7 +90,7 @@ public class DataHandler
     }
     
     /**
-     * Returns the tables inside a database file
+     * Returns the table names inside a database file
      * @param path path to the database file
      * @return the resulting ArrayList of strings containing table names
      */
@@ -123,18 +123,22 @@ public class DataHandler
      * @param table name of the table youre getting fields from
      * @return the resulting ArrayList of strings containing field names
      */
-    public static Vector<String> getFields(String path, String table)
+    public static Vector<SqlTableField> getFields(String path, String table)
     {
         String sql = "PRAGMA table_info(" + table + ");";
-        Vector<String> result = new Vector<>();
+        Vector<SqlTableField> result = new Vector<>();
         
         try (Connection conn = DriverManager.getConnection(URL_PREFIX + path); Statement statement = conn.createStatement())
         {
             ResultSet rs = statement.executeQuery(sql);
-
             while (rs.next())
             {
-                result.add(rs.getString("name"));
+                SqlTableField field = new SqlTableField();
+                field.setName(rs.getString("name"));
+                field.setType(SqlType.valueOf(rs.getString("type")));
+                field.setNotNull(rs.getBoolean("notnull"));
+                field.setPrimaryKey(rs.getBoolean("pk"));
+                result.add(field);
             }
         }
         catch (SQLException e)
@@ -143,6 +147,7 @@ public class DataHandler
             return null;
         }
         
+        // SVE DAJE POSLEDNJI COLUMN NECE DA UCITA TABELU POPRAVI PLS STO NE RADI AAAAAAAAA
         return result;
     }
     

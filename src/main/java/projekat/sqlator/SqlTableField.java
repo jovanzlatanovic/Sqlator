@@ -10,6 +10,10 @@ public class SqlTableField
     private boolean unique;
     
     private String sqlCode;
+
+    public SqlTableField()
+    {
+    }
     
     /**
      * Contains properties of a field meant to be contained in a table.
