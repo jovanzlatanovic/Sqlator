@@ -200,6 +200,13 @@ public class Main extends javax.swing.JFrame {
         Button_NewRow.setFocusable(false);
         Button_NewRow.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         Button_NewRow.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Button_NewRow.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                Button_NewRowActionPerformed(evt);
+            }
+        });
         ToolBar_TableData.add(Button_NewRow);
 
         Button_DeleteRow.setText("Delete row");
@@ -207,6 +214,13 @@ public class Main extends javax.swing.JFrame {
         Button_DeleteRow.setFocusable(false);
         Button_DeleteRow.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         Button_DeleteRow.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Button_DeleteRow.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                Button_DeleteRowActionPerformed(evt);
+            }
+        });
         ToolBar_TableData.add(Button_DeleteRow);
 
         Button_WriteData.setText("Write data");
@@ -214,6 +228,13 @@ public class Main extends javax.swing.JFrame {
         Button_WriteData.setFocusable(false);
         Button_WriteData.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         Button_WriteData.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Button_WriteData.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                Button_WriteDataActionPerformed(evt);
+            }
+        });
         ToolBar_TableData.add(Button_WriteData);
 
         javax.swing.GroupLayout statusBarLayout = new javax.swing.GroupLayout(statusBar);
@@ -368,6 +389,27 @@ public class Main extends javax.swing.JFrame {
         fillTableView();
     }//GEN-LAST:event_Button_ModifyTableActionPerformed
 
+    private void Button_NewRowActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_NewRowActionPerformed
+    {//GEN-HEADEREND:event_Button_NewRowActionPerformed
+        DefaultTableModel model = (DefaultTableModel) jTable_DatabaseContent.getModel();
+        model.addRow(new Object[]{});
+    }//GEN-LAST:event_Button_NewRowActionPerformed
+
+    private void Button_DeleteRowActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_DeleteRowActionPerformed
+    {//GEN-HEADEREND:event_Button_DeleteRowActionPerformed
+        DefaultTableModel model = (DefaultTableModel) jTable_DatabaseContent.getModel();
+        int selected = jTable_DatabaseContent.getSelectedRow();
+        if (selected < 0)
+            return;
+        model.removeRow(selected);
+    }//GEN-LAST:event_Button_DeleteRowActionPerformed
+
+    private void Button_WriteDataActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_WriteDataActionPerformed
+    {//GEN-HEADEREND:event_Button_WriteDataActionPerformed
+        DefaultTableModel model = (DefaultTableModel) jTable_DatabaseContent.getModel();
+        model.getDataVector()//TODO OVO
+    }//GEN-LAST:event_Button_WriteDataActionPerformed
+
     private boolean checkTableSelected(DefaultMutableTreeNode selectedNode)
     {
         if (selectedNode == null)
@@ -389,7 +431,12 @@ public class Main extends javax.swing.JFrame {
     {
         WORKING_PATH = path;
         
-        fillTableView();
+        if (!fillTableView())
+        {
+            JOptionPane.showMessageDialog(this, "Error opening the database.\nThe database is either corrupted or the file type is not supported", "Error opening database", 0);
+            closeDatabase();
+            return;
+        }
         
         Label_Status.setText(path);
         Button_CloseDatabase.setEnabled(true);
@@ -414,7 +461,7 @@ public class Main extends javax.swing.JFrame {
         DefaultTreeModel model = (DefaultTreeModel) Tree_Table.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
-        root.setUserObject("Open a datbase");
+        root.setUserObject("Open a database");
     }
     
     /**
@@ -449,7 +496,7 @@ public class Main extends javax.swing.JFrame {
     /**
      * Fills the JTree with a preview of the open databases tables and columns
      */
-    private void fillTableView()
+    private boolean fillTableView()
     {
         DefaultTreeModel model = (DefaultTreeModel) Tree_Table.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
@@ -460,6 +507,10 @@ public class Main extends javax.swing.JFrame {
         root.setUserObject(fileName.toString());
         
         ArrayList<String> tableNames = DataHandler.getTables(WORKING_PATH);
+        
+        if (tableNames == null)
+            return false;
+        
         for (int i = 0; i < tableNames.size(); i++)
         {
             DefaultMutableTreeNode tableNameNode = new DefaultMutableTreeNode(tableNames.get(i));
@@ -473,6 +524,7 @@ public class Main extends javax.swing.JFrame {
         }
         
         model.reload();
+        return true;
     }
     
     /**

@@ -41,14 +41,14 @@ public class DataHandler
             return false;
         }
     }
-    
+
     /**
      * Creates a table in the designated database
      * @param path which database to create a table in
      * @param sql the table creation sql code
-     * @return true if table is created successfully
+     * @throws SQLException An exception that occured during the sql execution
      */
-    public static boolean createTable(String path, String sql)
+    public static void createTable(String path, String sql) throws SQLException
     {
         String url = URL_PREFIX + path;
         
@@ -56,12 +56,11 @@ public class DataHandler
         {
             statement.execute(sql);
             System.out.println("createTable: A new table has been successfully added.");
-            return true;
         }
         catch (SQLException e)
         {
             System.out.println("createTable:" + e.toString());
-            return false;
+            throw e;
         }
     }
     
@@ -189,5 +188,10 @@ public class DataHandler
             System.out.println("selectAll:" + e.toString());
             return null;
         }
+    }
+    
+    public static void insertInto()
+    {
+        String sql = "INSERT INTO \"main\".\"TableName\"(\"Field1\",\"Field2\",\"Field3\") VALUES (NULL,NULL,NULL);";
     }
 }

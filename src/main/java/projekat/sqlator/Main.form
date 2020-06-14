@@ -244,6 +244,9 @@
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Button_NewRowActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Button_DeleteRow">
           <Properties>
@@ -253,6 +256,9 @@
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Button_DeleteRowActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Button_WriteData">
           <Properties>
@@ -262,6 +268,9 @@
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Button_WriteDataActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
