@@ -3,6 +3,7 @@ package projekat.sqlator;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -64,6 +65,22 @@ public class DataHandler
         }
     }
     
+    public static void executeSql(String path, String sql) throws SQLException
+    {
+        String url = URL_PREFIX + path;
+        
+        try (Connection conn = DriverManager.getConnection(url); Statement statement = conn.createStatement())
+        {
+            statement.execute(sql);
+            System.out.println("executeSql: Custom SQL code has been successfully executed.");
+        }
+        catch (SQLException e)
+        {
+            System.out.println("executeSql:" + e.toString());
+            throw e;
+        }
+    }
+    
     /**
      * Deletes a table in the designated database
      * @param path which database to delete a table from
@@ -93,7 +110,7 @@ public class DataHandler
      * @param path path to the database file
      * @return the resulting ArrayList of strings containing table names
      */
-    public static ArrayList<String> getTables(String path)
+    public static ArrayList<String> getTableNames(String path)
     {
         String sql = "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'";
         ArrayList<String> result = new ArrayList<>();
@@ -190,8 +207,62 @@ public class DataHandler
         }
     }
     
-    public static void insertInto()
+    /**
+     * Deletes the row by condition from the table
+     * @param path path to the database file
+     * @param table name of the table you're deleting from
+     * @param condition sql condition you wish to apply, the part after the "WHERE" sql command
+     * @throws SQLException An exception that occured during the sql execution
+     */
+    public static void deleteRow(String path, String table, String condition) throws SQLException
     {
-        String sql = "INSERT INTO \"main\".\"TableName\"(\"Field1\",\"Field2\",\"Field3\") VALUES (NULL,NULL,NULL);";
+        String sql = "DELETE FROM " + table + " WHERE " + condition + ";";
+        
+        try (Connection conn = DriverManager.getConnection(URL_PREFIX + path); PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            System.out.println("deleteRow:" + e.toString());
+            throw e;
+        }
+    }
+    
+    /**
+     * Updates a row in the table using a specific condition
+     * @param path path to the database file
+     * @param table name of the table you're deleting from
+     * @param condition sql condition you wish to apply, the part after the "SET" sql command. Must include "WHERE".
+     * @throws SQLException An exception that occured during the sql execution
+     */
+    public static void updateRow(String path, String table, String condition) throws SQLException
+    {
+        String sql = "UPDATE " + table + " SET " + condition + ";";
+        
+        try (Connection conn = DriverManager.getConnection(URL_PREFIX + path); PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            System.out.println("deleteRow:" + e.toString());
+            throw e;
+        }
+    }
+    
+    public static void newRow(String path, String table) throws SQLException
+    {
+        String sql = "INSERT INTO \"" + table + "\" DEFAULT VALUES";
+        
+        try (Connection conn = DriverManager.getConnection(URL_PREFIX + path); PreparedStatement pstmt = conn.prepareStatement(sql))
+        {
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            System.out.println("newRow:" + e.toString());
+            throw e;
+        }
     }
 }

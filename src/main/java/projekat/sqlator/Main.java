@@ -5,14 +5,22 @@
  */
 package projekat.sqlator;
 
+import java.awt.Desktop;
+import java.awt.event.WindowEvent;
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -25,7 +33,9 @@ import projekat.sqlator.DataHandler;
 public class Main extends javax.swing.JFrame {
 
     private String WORKING_PATH;
-
+    private String SELECTED_TABLE;
+    private boolean CHANGES = false;
+    
     /**
      * Creates new form Main
      */
@@ -73,12 +83,34 @@ public class Main extends javax.swing.JFrame {
         Label_Status = new javax.swing.JLabel();
         MenuBar = new javax.swing.JMenuBar();
         jMenu_File = new javax.swing.JMenu();
-        jMenu_Edit = new javax.swing.JMenu();
+        jMenuItem_NewDatabase = new javax.swing.JMenuItem();
+        jMenuItem_NewDatabaseFromSQL = new javax.swing.JMenuItem();
+        jMenuItem_OpenDatabase = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem_Exit = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu_View = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu_Help = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sqlator");
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
+                formWindowClosing(evt);
+            }
+        });
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Open a database");
         Tree_Table.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
@@ -257,15 +289,149 @@ public class Main extends javax.swing.JFrame {
         );
 
         jMenu_File.setText("File");
+
+        jMenuItem_NewDatabase.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem_NewDatabase.setText("New database");
+        jMenuItem_NewDatabase.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem_NewDatabaseActionPerformed(evt);
+            }
+        });
+        jMenu_File.add(jMenuItem_NewDatabase);
+
+        jMenuItem_NewDatabaseFromSQL.setText("New database from SQL");
+        jMenuItem_NewDatabaseFromSQL.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem_NewDatabaseFromSQLActionPerformed(evt);
+            }
+        });
+        jMenu_File.add(jMenuItem_NewDatabaseFromSQL);
+
+        jMenuItem_OpenDatabase.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem_OpenDatabase.setText("Open database");
+        jMenuItem_OpenDatabase.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem_OpenDatabaseActionPerformed(evt);
+            }
+        });
+        jMenu_File.add(jMenuItem_OpenDatabase);
+        jMenu_File.add(jSeparator2);
+
+        jMenuItem8.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem8.setText("Save data");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu_File.add(jMenuItem8);
+        jMenu_File.add(jSeparator4);
+
+        jMenuItem_Exit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem_Exit.setText("Exit");
+        jMenuItem_Exit.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem_ExitActionPerformed(evt);
+            }
+        });
+        jMenu_File.add(jMenuItem_Exit);
+
         MenuBar.add(jMenu_File);
 
-        jMenu_Edit.setText("Edit");
-        MenuBar.add(jMenu_Edit);
+        jMenu1.setText("Edit");
+
+        jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_INSERT, 0));
+        jMenuItem6.setText("New row");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem6);
+
+        jMenuItem7.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, 0));
+        jMenuItem7.setText("Delete row");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem7);
+
+        MenuBar.add(jMenu1);
 
         jMenu_View.setText("View");
+
+        jMenuItem1.setText("Database toolbar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu_View.add(jMenuItem1);
+
+        jMenuItem2.setText("Table toolbar");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu_View.add(jMenuItem2);
+
+        jMenuItem3.setText("Row editing toolbar");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu_View.add(jMenuItem3);
+
         MenuBar.add(jMenu_View);
 
         jMenu_Help.setText("Help");
+
+        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        jMenuItem5.setText("How to use");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu_Help.add(jMenuItem5);
+        jMenu_Help.add(jSeparator3);
+
+        jMenuItem4.setText("About");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu_Help.add(jMenuItem4);
+
         MenuBar.add(jMenu_Help);
 
         setJMenuBar(MenuBar);
@@ -303,42 +469,11 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void Button_NewDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_NewDatabaseActionPerformed
-        //Create a new dialog that gets user input for the location of the new database
-        //TODO: Handle when exits out of the dialog
-        JDialogNewDatabase dialog = new JDialogNewDatabase(this, true);
-        String path = dialog.showDialog();
-        
-        if (path == "false")
-            return;
-        
-        boolean result = DataHandler.createNewDatabase(path);
-        String reply;
-        
-        if (result)
-        {
-            WORKING_PATH = path;
-            
-            reply = "Created new database successfully.\n" + path;
-            JOptionPane.showMessageDialog(rootPane, reply);
-            JDialogNewTable newTableForm = new JDialogNewTable(this, true, WORKING_PATH, false, null);
-            newTableForm.showDialog();
-            openDatabase(path);
-        }
-        else
-        {
-            reply = "Error creating database.";
-            JOptionPane.showMessageDialog(rootPane, reply);
-        }
+        createNewDatabase(false);
     }//GEN-LAST:event_Button_NewDatabaseActionPerformed
 
     private void Button_OpenDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_OpenDatabaseActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Select database");
-        
-        if (fileChooser.showDialog(this, "Select database") == JFileChooser.APPROVE_OPTION)
-        {
-            openDatabase(fileChooser.getSelectedFile().toString());
-        }
+        openDatabase();
     }//GEN-LAST:event_Button_OpenDatabaseActionPerformed
 
     private void Button_CloseDatabaseActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_CloseDatabaseActionPerformed
@@ -391,24 +526,109 @@ public class Main extends javax.swing.JFrame {
 
     private void Button_NewRowActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_NewRowActionPerformed
     {//GEN-HEADEREND:event_Button_NewRowActionPerformed
-        DefaultTableModel model = (DefaultTableModel) jTable_DatabaseContent.getModel();
-        model.addRow(new Object[]{});
+        insertRow();
     }//GEN-LAST:event_Button_NewRowActionPerformed
 
     private void Button_DeleteRowActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_DeleteRowActionPerformed
     {//GEN-HEADEREND:event_Button_DeleteRowActionPerformed
-        DefaultTableModel model = (DefaultTableModel) jTable_DatabaseContent.getModel();
-        int selected = jTable_DatabaseContent.getSelectedRow();
-        if (selected < 0)
-            return;
-        model.removeRow(selected);
+        deleteRow();
     }//GEN-LAST:event_Button_DeleteRowActionPerformed
 
     private void Button_WriteDataActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_Button_WriteDataActionPerformed
     {//GEN-HEADEREND:event_Button_WriteDataActionPerformed
-        DefaultTableModel model = (DefaultTableModel) jTable_DatabaseContent.getModel();
-        model.getDataVector()//TODO OVO
+        saveChanges();
     }//GEN-LAST:event_Button_WriteDataActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
+    {//GEN-HEADEREND:event_formWindowClosing
+        if (CHANGES)
+        {
+            int result = JOptionPane.showConfirmDialog(this, "There are unsaved changes, are you sure you want to exit?", "Thank you for using Sqlator", JOptionPane.YES_NO_OPTION, 2);
+            if(result == JOptionPane.YES_OPTION)
+            {
+                this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+            }
+            else
+            {
+                this.setDefaultCloseOperation(this.DO_NOTHING_ON_CLOSE);
+                return;
+            }
+        }
+        
+        JOptionPane.showMessageDialog(this, "All table changes are saved automatically :)", "Thank you for using Sqlator", JOptionPane.PLAIN_MESSAGE);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jMenuItem_NewDatabaseActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem_NewDatabaseActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem_NewDatabaseActionPerformed
+        createNewDatabase(false);
+    }//GEN-LAST:event_jMenuItem_NewDatabaseActionPerformed
+
+    private void jMenuItem_OpenDatabaseActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem_OpenDatabaseActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem_OpenDatabaseActionPerformed
+        openDatabase();
+    }//GEN-LAST:event_jMenuItem_OpenDatabaseActionPerformed
+
+    private void jMenuItem_ExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem_ExitActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem_ExitActionPerformed
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_jMenuItem_ExitActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
+        ToolBar_Database.setVisible(!ToolBar_Database.isVisible());
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem2ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem2ActionPerformed
+        ToolBar_Table.setVisible(!ToolBar_Table.isVisible());
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem3ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem3ActionPerformed
+        ToolBar_TableData.setVisible(!ToolBar_TableData.isVisible());
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem_NewDatabaseFromSQLActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem_NewDatabaseFromSQLActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem_NewDatabaseFromSQLActionPerformed
+        createNewDatabase(true);
+    }//GEN-LAST:event_jMenuItem_NewDatabaseFromSQLActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem4ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem4ActionPerformed
+        JDialogAbout about = new JDialogAbout(this, true);
+        about.showDialog();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem6ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem6ActionPerformed
+        if (Button_NewRow.isEnabled())
+            insertRow();
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem7ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem7ActionPerformed
+        if (Button_DeleteRow.isEnabled())
+            deleteRow();
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem8ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem8ActionPerformed
+        if (Button_WriteData.isEnabled())
+            saveChanges();
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem5ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem5ActionPerformed
+        try {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            Desktop.getDesktop().browse(new URI("https://gitlab.com/Jovan3211/sqlator"));
+            }
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, "Error opening the browser, if you need help go to: https://gitlab.com/Jovan3211/sqlator" , "Error opening default browser", 0);
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private boolean checkTableSelected(DefaultMutableTreeNode selectedNode)
     {
@@ -424,6 +644,168 @@ public class Main extends javax.swing.JFrame {
                 break;*/
             default:
                 return false;
+        }
+    }
+    
+    private void saveChanges()
+    {
+        Vector<SqlTableField> fields = DataHandler.getFields(WORKING_PATH, SELECTED_TABLE);
+        Vector<Vector<Object>> DATA_BEFORE_SAVING = DataHandler.selectAll(WORKING_PATH, SELECTED_TABLE);
+        
+        for (int row = 0; row < jTable_DatabaseContent.getRowCount(); row++)
+        {
+            String update_condition = "";
+            String where_condition = "WHERE ";
+            
+            for (int column = 0; column < fields.size(); column++)
+            {
+                try
+                {
+                    update_condition += fields.get(column).getName() + " = '" + jTable_DatabaseContent.getValueAt(row, column).toString() + "'";
+                }
+                catch (NullPointerException ex)
+                {
+                    update_condition += fields.get(column).getName() + " = NULL";
+                }
+
+                try
+                {
+                    where_condition += fields.get(column).getName() + " = '" + DATA_BEFORE_SAVING.get(row).get(column).toString() + "'";
+                }
+                catch (NullPointerException ex)
+                {
+                    where_condition += fields.get(column).getName() + " IS NULL";
+                }
+
+                if ((column + 1) < fields.size())
+                {
+                    update_condition += ", ";
+                    where_condition += " AND ";
+                }
+            }
+            
+            String result = update_condition + " " + where_condition;
+            try
+            {
+                DataHandler.updateRow(WORKING_PATH, SELECTED_TABLE, result);
+                CHANGES = false;
+            }
+            catch (SQLException ex)
+            {
+                JOptionPane.showMessageDialog(this, "Error saving data:\n" + ex.getMessage() + "\n\nSaving has been suspended. Any previous rows have been saved to the database." , "Error saving data", 0);
+                return;
+            }
+        }
+    }
+    
+    private void insertRow()
+    {
+        try
+        {
+            DataHandler.newRow(WORKING_PATH, SELECTED_TABLE);
+        } catch (SQLException e)
+        {
+            JOptionPane.showMessageDialog(this, "Error creating a new row.\n" + e.getMessage(), "Error", 0);
+        }
+        
+        refreshTableContents(SELECTED_TABLE);
+    }
+    
+    private void deleteRow()
+    {
+        try
+        {
+            Vector<SqlTableField> fields = DataHandler.getFields(WORKING_PATH, SELECTED_TABLE);
+            
+            String condition = "";
+            
+            for (int i = 0; i < fields.size(); i++)
+            {
+                try
+                {
+                    condition += fields.get(i).getName() + " = " + jTable_DatabaseContent.getValueAt(jTable_DatabaseContent.getSelectedRow(), i).toString();
+                }
+                catch (NullPointerException ex)
+                {
+                    condition += fields.get(i).getName() + " IS NULL";
+                }
+            
+                if ((i + 1) < fields.size())
+                {
+                    condition += " AND ";
+                }
+            }
+            
+            jTable_DatabaseContent.getSelectedRow();
+         
+            DataHandler.deleteRow(WORKING_PATH, SELECTED_TABLE, condition);
+            
+            DefaultTableModel model = (DefaultTableModel) jTable_DatabaseContent.getModel();
+            int selected = jTable_DatabaseContent.getSelectedRow();
+            if (selected < 0)
+                return;
+            model.removeRow(selected);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(this, "Error deleting row.\n" + e.getMessage(), "Error", 0);
+        }
+    }
+    
+    private void createNewDatabase(boolean fromSql)
+    {
+        //Create a new dialog that gets user input for the location of the new database
+        //TODO: Handle when exits out of the dialog
+        String path;
+        
+        if (fromSql)
+        {
+            JDialogNewDatabaseFromSql dialog = new JDialogNewDatabaseFromSql(this, true);
+            path = dialog.showDialog();
+        }
+        else
+        {
+            JDialogNewDatabase dialog = new JDialogNewDatabase(this, true);
+            path = dialog.showDialog();
+        }
+        
+        if (path == "false")
+            return;
+        
+        boolean result = false;
+        if (!fromSql)
+            DataHandler.createNewDatabase(path);
+        String reply;
+        
+        if (result)
+        {
+            WORKING_PATH = path;
+            
+            reply = "Created new database successfully.\n" + path;
+            JOptionPane.showMessageDialog(this, reply);
+            JDialogNewTable newTableForm = new JDialogNewTable(this, true, WORKING_PATH, false, null);
+            newTableForm.showDialog();
+            openDatabase(path);
+        }
+        else
+        {
+            reply = "Error creating database.";
+            JOptionPane.showMessageDialog(this, reply);
+        }
+    }
+    
+    private void openDatabase()
+    {
+        closeDatabase();
+        
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Database files", "db", "sqlite file");
+        fileChooser.setFileFilter(filter);
+        fileChooser.setDialogTitle("Select database");
+        
+        if (fileChooser.showDialog(this, "Select database") == JFileChooser.APPROVE_OPTION)
+        {
+            openDatabase(fileChooser.getSelectedFile().toString());
         }
     }
     
@@ -469,6 +851,8 @@ public class Main extends javax.swing.JFrame {
      */
     private void fillTableContents(String tableName)
     {
+        SELECTED_TABLE = tableName;
+        
         Vector<Vector<Object>> tableContent = DataHandler.selectAll(WORKING_PATH, tableName);
         Vector<SqlTableField> fields = DataHandler.getFields(WORKING_PATH, tableName);
         
@@ -478,10 +862,32 @@ public class Main extends javax.swing.JFrame {
         
         JTable table = new JTable(tableContent, fieldNames);
         jTable_DatabaseContent.setModel(table.getModel());
+        jTable_DatabaseContent.getModel().addTableModelListener((TableModelEvent e) ->
+        {
+            if (e.getColumn() > -1 && !CHANGES)
+            {
+                handleTableCellValueChange();
+            }
+        });
         
         Button_NewRow.setEnabled(true);
         Button_DeleteRow.setEnabled(true);
         Button_WriteData.setEnabled(true);
+    }
+    
+    private void refreshTableContents(String tableName)
+    {
+        jTable_DatabaseContent.setModel(new DefaultTableModel());
+        
+        Vector<Vector<Object>> tableContent = DataHandler.selectAll(WORKING_PATH, tableName);
+        Vector<SqlTableField> fields = DataHandler.getFields(WORKING_PATH, tableName);
+        
+        //turn all of sqltablefield.name into string vector of field names
+        Vector<String> fieldNames = new Vector<>();
+        fields.forEach((field) -> fieldNames.add(field.getName()));
+        
+        JTable table = new JTable(tableContent, fieldNames);
+        jTable_DatabaseContent.setModel(table.getModel());
     }
     
     private void clearTableContents()
@@ -506,7 +912,7 @@ public class Main extends javax.swing.JFrame {
         Path fileName = tempPath.getFileName();
         root.setUserObject(fileName.toString());
         
-        ArrayList<String> tableNames = DataHandler.getTables(WORKING_PATH);
+        ArrayList<String> tableNames = DataHandler.getTableNames(WORKING_PATH);
         
         if (tableNames == null)
             return false;
@@ -525,6 +931,11 @@ public class Main extends javax.swing.JFrame {
         
         model.reload();
         return true;
+    }
+    
+    private void handleTableCellValueChange()
+    {
+        CHANGES = true;
     }
     
     /**
@@ -590,13 +1001,28 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JToolBar ToolBar_Table;
     private javax.swing.JToolBar ToolBar_TableData;
     private javax.swing.JTree Tree_Table;
-    private javax.swing.JMenu jMenu_Edit;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem_Exit;
+    private javax.swing.JMenuItem jMenuItem_NewDatabase;
+    private javax.swing.JMenuItem jMenuItem_NewDatabaseFromSQL;
+    private javax.swing.JMenuItem jMenuItem_OpenDatabase;
     private javax.swing.JMenu jMenu_File;
     private javax.swing.JMenu jMenu_Help;
     private javax.swing.JMenu jMenu_View;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JTable jTable_DatabaseContent;
     private javax.swing.JPanel statusBar;
     // End of variables declaration//GEN-END:variables
