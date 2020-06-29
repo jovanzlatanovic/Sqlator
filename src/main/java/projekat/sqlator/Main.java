@@ -411,7 +411,7 @@ public class Main extends javax.swing.JFrame {
         jMenu_Help.setText("Help");
 
         jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        jMenuItem5.setText("How to use");
+        jMenuItem5.setText("Project gitlab");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -774,7 +774,7 @@ public class Main extends javax.swing.JFrame {
         
         boolean result = false;
         if (!fromSql)
-            DataHandler.createNewDatabase(path);
+            result = DataHandler.createNewDatabase(path);
         String reply;
         
         if (result)

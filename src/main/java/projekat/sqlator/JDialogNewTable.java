@@ -324,6 +324,12 @@ public class JDialogNewTable extends javax.swing.JDialog
     {//GEN-HEADEREND:event_Button_CreateTableActionPerformed
         String message = "Created table successfully.";
         
+        if (!sqlTable.hasPrimaryKey())
+        {
+            JOptionPane.showMessageDialog(this, "The table must have one field with a private key, otherwise the application will not work correctly.", "Error creating table", 0);
+            return;
+        }
+            
         if (modifyTableMode)
         {
             int result = JOptionPane.showConfirmDialog(this, "Modifying a table's structure will permanently delete any data from that table.\nAre you sure you want to continue? This action cannot be undone.", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);

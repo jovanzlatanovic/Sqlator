@@ -39,6 +39,17 @@ public class SqlTable
         fieldList.remove(index);
     }
     
+    public boolean hasPrimaryKey()
+    {
+        for (SqlTableField field : fieldList)
+        {
+            if (field.isPrimaryKey())
+                return true;
+        }
+        
+        return false;
+    }
+    
     public String getSqlCode()
     {
         String generated = "CREATE TABLE \"" + name + "\" (";
