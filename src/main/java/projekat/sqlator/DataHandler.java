@@ -144,6 +144,8 @@ public class DataHandler
         String sql = "PRAGMA table_info(" + table + ");";
         Vector<SqlTableField> result = new Vector<>();
         
+        Vector<String> uniqueFields = checkUniqueColumn(path, table);
+        
         try (Connection conn = DriverManager.getConnection(URL_PREFIX + path); Statement statement = conn.createStatement())
         {
             ResultSet rs = statement.executeQuery(sql);
@@ -154,6 +156,10 @@ public class DataHandler
                 field.setType(SqlType.valueOf(rs.getString("type")));
                 field.setNotNull(rs.getBoolean("notnull"));
                 field.setPrimaryKey(rs.getBoolean("pk"));
+                
+                if (uniqueFields.contains(field.getName()))
+                    field.setUnique(true);
+                
                 result.add(field);
             }
         }
@@ -251,6 +257,49 @@ public class DataHandler
         }
     }
     
+    // Finding out which column has a unique value indentifier, returns list of columns which have the unique identifier
+    public static Vector<String> checkUniqueColumn(String path, String table)
+    {
+        String sql_pragma_list = "PRAGMA index_list(" + table + ");";
+        String sql_pragma_info = "PRAGMA index_info(replace_me);";
+        
+        try (Connection conn = DriverManager.getConnection(URL_PREFIX + path); Statement statement = conn.createStatement())
+        {
+            ResultSet rs = statement.executeQuery(sql_pragma_list);
+            Vector<String> unique_fields = new Vector<String>();
+            Vector<String> sql_pragma_info_list = new Vector<String>();
+            
+            // Get the column autoindex names of unique fields
+            while (rs.next())
+            {
+                String temp_table = rs.getString("name");
+                int is_unique = rs.getInt("unique");
+                
+                if (is_unique == 1)
+                {
+                    sql_pragma_info_list.add(sql_pragma_info.replace("replace_me", temp_table));
+                }
+            }
+            
+            // Get the field names of unique values
+            for (String sql_command : sql_pragma_info_list)
+            {
+                ResultSet rs2 = statement.executeQuery(sql_command);
+                while (rs2.next())
+                {
+                    unique_fields.add(rs2.getString("name"));
+                }
+            }
+            
+            return unique_fields;
+        }
+        catch (SQLException e)
+        {
+            System.out.println("selectAll:" + e.toString());
+            return null;
+        }
+    }
+    
     public static void newRow(String path, String table) throws SQLException
     {
         String sql = "INSERT INTO \"" + table + "\" DEFAULT VALUES";
@@ -261,6 +310,49 @@ public class DataHandler
         }
         catch (SQLException e)
         {
+            if (e.getMessage().contains("NOT NULL constraint failed"))
+            {
+                Vector<SqlTableField> fields = DataHandler.getFields(path, table);
+                
+                sql = "INSERT INTO \"" + table + "\"(";
+                String values = "VALUES(";
+                
+                int i = 0;
+                for (SqlTableField field : fields)
+                {
+                    sql += field.getName();
+                    if (field.isNotNull())
+                    {
+                        values += "0";
+                    }
+                    else
+                    {
+                        values += "NULL";
+                    }
+                    
+                    if (i < fields.size()-1)
+                    {
+                        sql += " , ";
+                        values += " , ";
+                    }
+                    i++;
+                }
+                
+                values += ");";
+                sql += ") " + values;
+                
+                try (Connection conn = DriverManager.getConnection(URL_PREFIX + path); PreparedStatement pstmt = conn.prepareStatement(sql))
+                {
+                    pstmt.executeUpdate();
+                    return;
+                }
+                catch (SQLException ex)
+                {
+                    System.out.println("newRow, NOT NULL failed:" + ex.toString());
+                    throw ex;
+                }
+            }
+            
             System.out.println("newRow:" + e.toString());
             throw e;
         }

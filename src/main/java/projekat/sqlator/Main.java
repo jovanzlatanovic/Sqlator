@@ -18,10 +18,12 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import projekat.sqlator.DataHandler;
@@ -42,6 +44,8 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         setLocationRelativeTo(null);
+        
+        
         
         Tree_Table.addTreeSelectionListener((TreeSelectionEvent e) ->
         {
@@ -66,17 +70,25 @@ public class Main extends javax.swing.JFrame {
         Tree_Table = new javax.swing.JTree();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_DatabaseContent = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField_search = new javax.swing.JTextField();
         ToolBar_Database = new javax.swing.JToolBar();
         Button_NewDatabase = new javax.swing.JButton();
+        jSeparator10 = new javax.swing.JToolBar.Separator();
         Button_OpenDatabase = new javax.swing.JButton();
+        jSeparator11 = new javax.swing.JToolBar.Separator();
         Button_CloseDatabase = new javax.swing.JButton();
         ToolBar_Table = new javax.swing.JToolBar();
         Button_NewTable = new javax.swing.JButton();
+        jSeparator8 = new javax.swing.JToolBar.Separator();
         Button_ModifyTable = new javax.swing.JButton();
+        jSeparator9 = new javax.swing.JToolBar.Separator();
         Button_deleteTable = new javax.swing.JButton();
         ToolBar_TableData = new javax.swing.JToolBar();
         Button_NewRow = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JToolBar.Separator();
         Button_DeleteRow = new javax.swing.JButton();
+        jSeparator7 = new javax.swing.JToolBar.Separator();
         Button_WriteData = new javax.swing.JButton();
         statusBar = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -93,6 +105,8 @@ public class Main extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem9 = new javax.swing.JMenuItem();
         jMenu_View = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -130,24 +144,47 @@ public class Main extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable_DatabaseContent);
 
+        jLabel1.setText("Search: ");
+
+        jTextField_search.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyReleased(java.awt.event.KeyEvent evt)
+            {
+                jTextField_searchKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout Panel_WorkAreaLayout = new javax.swing.GroupLayout(Panel_WorkArea);
         Panel_WorkArea.setLayout(Panel_WorkAreaLayout);
         Panel_WorkAreaLayout.setHorizontalGroup(
             Panel_WorkAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Panel_WorkAreaLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE))
+                .addGroup(Panel_WorkAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel_WorkAreaLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField_search, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         Panel_WorkAreaLayout.setVerticalGroup(
             Panel_WorkAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(Panel_WorkAreaLayout.createSequentialGroup()
+                .addComponent(jScrollPane1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Panel_WorkAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField_search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
+        ToolBar_Database.setFloatable(false);
         ToolBar_Database.setRollover(true);
 
-        Button_NewDatabase.setText("Create new database");
+        Button_NewDatabase.setText("  Create new database  ");
+        Button_NewDatabase.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Button_NewDatabase.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -156,8 +193,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
         ToolBar_Database.add(Button_NewDatabase);
+        ToolBar_Database.add(jSeparator10);
 
-        Button_OpenDatabase.setText("Open database");
+        Button_OpenDatabase.setText("  Open database  ");
+        Button_OpenDatabase.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Button_OpenDatabase.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -166,8 +205,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
         ToolBar_Database.add(Button_OpenDatabase);
+        ToolBar_Database.add(jSeparator11);
 
-        Button_CloseDatabase.setText("Close database");
+        Button_CloseDatabase.setText("  Close database  ");
+        Button_CloseDatabase.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Button_CloseDatabase.setEnabled(false);
         Button_CloseDatabase.setFocusable(false);
         Button_CloseDatabase.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -181,9 +222,11 @@ public class Main extends javax.swing.JFrame {
         });
         ToolBar_Database.add(Button_CloseDatabase);
 
+        ToolBar_Table.setFloatable(false);
         ToolBar_Table.setRollover(true);
 
-        Button_NewTable.setText("New Table");
+        Button_NewTable.setText("  New Table  ");
+        Button_NewTable.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Button_NewTable.setEnabled(false);
         Button_NewTable.setFocusable(false);
         Button_NewTable.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -196,8 +239,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
         ToolBar_Table.add(Button_NewTable);
+        ToolBar_Table.add(jSeparator8);
 
-        Button_ModifyTable.setText("Modify table");
+        Button_ModifyTable.setText("  Modify table  ");
+        Button_ModifyTable.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Button_ModifyTable.setEnabled(false);
         Button_ModifyTable.setFocusable(false);
         Button_ModifyTable.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -210,8 +255,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
         ToolBar_Table.add(Button_ModifyTable);
+        ToolBar_Table.add(jSeparator9);
 
-        Button_deleteTable.setText("Delete table");
+        Button_deleteTable.setText("  Delete table  ");
+        Button_deleteTable.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Button_deleteTable.setEnabled(false);
         Button_deleteTable.setFocusable(false);
         Button_deleteTable.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -225,9 +272,11 @@ public class Main extends javax.swing.JFrame {
         });
         ToolBar_Table.add(Button_deleteTable);
 
+        ToolBar_TableData.setFloatable(false);
         ToolBar_TableData.setRollover(true);
 
-        Button_NewRow.setText("New row");
+        Button_NewRow.setText("  New row  ");
+        Button_NewRow.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Button_NewRow.setEnabled(false);
         Button_NewRow.setFocusable(false);
         Button_NewRow.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -241,7 +290,12 @@ public class Main extends javax.swing.JFrame {
         });
         ToolBar_TableData.add(Button_NewRow);
 
-        Button_DeleteRow.setText("Delete row");
+        jSeparator6.setMinimumSize(new java.awt.Dimension(0, 6));
+        ToolBar_TableData.add(jSeparator6);
+
+        Button_DeleteRow.setText("  Delete row  ");
+        Button_DeleteRow.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Button_DeleteRow.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         Button_DeleteRow.setEnabled(false);
         Button_DeleteRow.setFocusable(false);
         Button_DeleteRow.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -254,8 +308,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
         ToolBar_TableData.add(Button_DeleteRow);
+        ToolBar_TableData.add(jSeparator7);
 
-        Button_WriteData.setText("Write data");
+        Button_WriteData.setText("   Save data  ");
+        Button_WriteData.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Button_WriteData.setEnabled(false);
         Button_WriteData.setFocusable(false);
         Button_WriteData.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -371,6 +427,18 @@ public class Main extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem7);
+        jMenu1.add(jSeparator5);
+
+        jMenuItem9.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem9.setText("Find");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem9);
 
         MenuBar.add(jMenu1);
 
@@ -411,7 +479,7 @@ public class Main extends javax.swing.JFrame {
         jMenu_Help.setText("Help");
 
         jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        jMenuItem5.setText("Project gitlab");
+        jMenuItem5.setText("Sqlator GitLab page");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -441,15 +509,16 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(statusBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(ToolBar_Table, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ToolBar_TableData, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Panel_WorkArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ToolBar_Database, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ToolBar_Table, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ToolBar_TableData, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Panel_WorkArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addComponent(ToolBar_Database, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -554,8 +623,10 @@ public class Main extends javax.swing.JFrame {
                 return;
             }
         }
-        
-        JOptionPane.showMessageDialog(this, "All table changes are saved automatically :)", "Thank you for using Sqlator", JOptionPane.PLAIN_MESSAGE);
+        else
+        {
+            JOptionPane.showMessageDialog(this, "All table changes are saved automatically :)", "Thank you for using Sqlator", JOptionPane.PLAIN_MESSAGE);
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItem_NewDatabaseActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem_NewDatabaseActionPerformed
@@ -630,6 +701,21 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem9ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem9ActionPerformed
+        jTextField_search.requestFocus();
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jTextField_searchKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTextField_searchKeyReleased
+    {//GEN-HEADEREND:event_jTextField_searchKeyReleased
+        DefaultTableModel model = (DefaultTableModel) jTable_DatabaseContent.getModel();
+        String search = jTextField_search.getText().toLowerCase();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(model);
+        jTable_DatabaseContent.setRowSorter(sorter);
+        
+        sorter.setRowFilter(RowFilter.regexFilter(search));
+    }//GEN-LAST:event_jTextField_searchKeyReleased
+
     private boolean checkTableSelected(DefaultMutableTreeNode selectedNode)
     {
         if (selectedNode == null)
@@ -689,6 +775,7 @@ public class Main extends javax.swing.JFrame {
             {
                 DataHandler.updateRow(WORKING_PATH, SELECTED_TABLE, result);
                 CHANGES = false;
+                Label_Status.setText(WORKING_PATH + " - Saved!");
             }
             catch (SQLException ex)
             {
@@ -757,6 +844,7 @@ public class Main extends javax.swing.JFrame {
         //Create a new dialog that gets user input for the location of the new database
         //TODO: Handle when exits out of the dialog
         String path;
+        boolean result = false;
         
         if (fromSql)
         {
@@ -771,8 +859,9 @@ public class Main extends javax.swing.JFrame {
         
         if (path == "false")
             return;
-        
-        boolean result = false;
+        else
+            result = true;
+                
         if (!fromSql)
             result = DataHandler.createNewDatabase(path);
         String reply;
@@ -781,8 +870,11 @@ public class Main extends javax.swing.JFrame {
         {
             WORKING_PATH = path;
             
-            reply = "Created new database successfully.\n" + path;
-            JOptionPane.showMessageDialog(this, reply);
+            if (fromSql)
+            {
+                openDatabase(path);
+                return;
+            }
             JDialogNewTable newTableForm = new JDialogNewTable(this, true, WORKING_PATH, false, null);
             newTableForm.showDialog();
             openDatabase(path);
@@ -806,7 +898,7 @@ public class Main extends javax.swing.JFrame {
         if (fileChooser.showDialog(this, "Select database") == JFileChooser.APPROVE_OPTION)
         {
             openDatabase(fileChooser.getSelectedFile().toString());
-        }
+        }        
     }
     
     private void openDatabase(String path)
@@ -936,6 +1028,7 @@ public class Main extends javax.swing.JFrame {
     private void handleTableCellValueChange()
     {
         CHANGES = true;
+        Label_Status.setText(WORKING_PATH + " - Unsaved table changes");
     }
     
     /**
@@ -1001,6 +1094,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JToolBar ToolBar_Table;
     private javax.swing.JToolBar ToolBar_TableData;
     private javax.swing.JTree Tree_Table;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -1010,6 +1104,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JMenuItem jMenuItem_Exit;
     private javax.swing.JMenuItem jMenuItem_NewDatabase;
     private javax.swing.JMenuItem jMenuItem_NewDatabaseFromSQL;
@@ -1020,10 +1115,18 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator10;
+    private javax.swing.JToolBar.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JToolBar.Separator jSeparator6;
+    private javax.swing.JToolBar.Separator jSeparator7;
+    private javax.swing.JToolBar.Separator jSeparator8;
+    private javax.swing.JToolBar.Separator jSeparator9;
     private javax.swing.JTable jTable_DatabaseContent;
+    private javax.swing.JTextField jTextField_search;
     private javax.swing.JPanel statusBar;
     // End of variables declaration//GEN-END:variables
 }

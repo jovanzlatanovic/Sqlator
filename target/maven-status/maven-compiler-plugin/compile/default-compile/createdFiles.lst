@@ -3,6 +3,7 @@ projekat\sqlator\Main$9.class
 projekat\sqlator\JDialogNewTable$7.class
 projekat\sqlator\Main$2.class
 projekat\sqlator\JDialogNewDatabaseFromSql$3.class
+projekat\sqlator\JDialogAbout$3.class
 projekat\sqlator\JDialogNewDatabaseFromSql$6.class
 projekat\sqlator\JDialogNewDatabase$6$1.class
 projekat\sqlator\Main$20.class
@@ -16,6 +17,7 @@ projekat\sqlator\JDialogNewDatabase.class
 projekat\sqlator\SqlType.class
 projekat\sqlator\JDialogNewTable$1.class
 projekat\sqlator\Main$16.class
+projekat\sqlator\JDialogAbout$3$1.class
 projekat\sqlator\JDialogNewTable$7$1.class
 projekat\sqlator\Main$6.class
 projekat\sqlator\JDialogNewDatabase$1.class
@@ -23,6 +25,7 @@ projekat\sqlator\JDialogNewTable$4.class
 projekat\sqlator\JDialogNewDatabase$4.class
 projekat\sqlator\Main$19.class
 projekat\sqlator\Main$3.class
+projekat\sqlator\Main$24.class
 projekat\sqlator\Main$12.class
 projekat\sqlator\JDialogNewTable$2.class
 projekat\sqlator\JDialogNewDatabaseFromSql.class
@@ -36,6 +39,7 @@ projekat\sqlator\JDialogNewDatabase$2.class
 projekat\sqlator\Main$7.class
 projekat\sqlator\JDialogNewDatabase$3.class
 projekat\sqlator\JDialogNewTable$5.class
+projekat\sqlator\Main$25.class
 projekat\sqlator\JDialogNewDatabaseFromSql$4.class
 projekat\sqlator\JDialogNewDatabaseFromSql$1.class
 projekat\sqlator\Main$18.class
@@ -49,7 +53,6 @@ projekat\sqlator\JDialogNewTable.class
 projekat\sqlator\JDialogNewTable$6.class
 projekat\sqlator\Main$1.class
 projekat\sqlator\JDialogNewDatabaseFromSql$6$1.class
-projekat\sqlator\JDialogAbout$2$1.class
 projekat\sqlator\SqlTableField.class
 projekat\sqlator\JDialogAbout.class
 projekat\sqlator\Main$8.class

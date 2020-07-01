@@ -36,8 +36,8 @@
                               <Component id="jLabel2" min="-2" pref="48" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jLabel4" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabel5" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -110,7 +110,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
-        <Property name="text" type="java.lang.String" value="database."/>
+        <Property name="text" type="java.lang.String" value="database. It is recommended to open database files created by Sqlator."/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSlider" name="jSlider1">
@@ -121,6 +121,7 @@
       </Properties>
       <Events>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSlider1StateChanged"/>
+        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jSlider1MouseReleased"/>
       </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">

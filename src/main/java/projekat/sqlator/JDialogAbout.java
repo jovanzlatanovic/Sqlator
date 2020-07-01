@@ -70,7 +70,7 @@ public class JDialogAbout extends javax.swing.JDialog
 
         jLabel4.setText("A simple database editor and creator which works with (mostly) any SQLite");
 
-        jLabel5.setText("database.");
+        jLabel5.setText("database. It is recommended to open database files created by Sqlator.");
 
         jSlider1.setMaximum(10);
         jSlider1.setMinimum(1);
@@ -80,6 +80,13 @@ public class JDialogAbout extends javax.swing.JDialog
             public void stateChanged(javax.swing.event.ChangeEvent evt)
             {
                 jSlider1StateChanged(evt);
+            }
+        });
+        jSlider1.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseReleased(java.awt.event.MouseEvent evt)
+            {
+                jSlider1MouseReleased(evt);
             }
         });
 
@@ -100,8 +107,8 @@ public class JDialogAbout extends javax.swing.JDialog
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel6))
@@ -139,6 +146,21 @@ public class JDialogAbout extends javax.swing.JDialog
     {//GEN-HEADEREND:event_jSlider1StateChanged
 
     }//GEN-LAST:event_jSlider1StateChanged
+
+    private void jSlider1MouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jSlider1MouseReleased
+    {//GEN-HEADEREND:event_jSlider1MouseReleased
+        String mood = "";
+        int value = jSlider1.getValue();
+        
+        if (value < 4)
+            mood = ":(";
+        else if (value >= 4 && value < 7)
+            mood = ":|";
+        else
+            mood = ":)";
+        
+        JOptionPane.showMessageDialog(this, mood, "", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jSlider1MouseReleased
 
     /**
      * @param args the command line arguments

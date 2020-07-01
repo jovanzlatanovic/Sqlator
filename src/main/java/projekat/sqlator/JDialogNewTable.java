@@ -55,7 +55,7 @@ public class JDialogNewTable extends javax.swing.JDialog
             Button_CreateTable.setText("Apply changes");
             this.setTitle("Modify table");
             
-            JOptionPane.showMessageDialog(this, "Modifying a table doesn't yet support retaining auto increment and unique values.\nThe modify table dialog will open with those options set as false even if they are true.", "Modify table", 2);
+            //JOptionPane.showMessageDialog(this, "Modifying a table doesn't yet support retaining auto increment values.\nThe modify table dialog will open with AI fields set as false even if they're true.", "Modify table", 2);
             Vector<SqlTableField> fields = DataHandler.getFields(WORKING_PATH, tableToModify);
             
             DefaultTableModel model = (DefaultTableModel) Table_Fields.getModel();
@@ -66,7 +66,8 @@ public class JDialogNewTable extends javax.swing.JDialog
                 SqlTableField field = fields.get(i);
                 sqlTable.addField(field);
                 
-                model.addRow(new Object[]{field.getName(), field.getType().toString(), field.isNotNull(), field.isPrimaryKey(), field.isAutoIncrement(), field.isUnique()});
+                // TODO: Currently the program doesnt support a column having PK without AI, so it is assumed when a column is a PK, it is AI
+                model.addRow(new Object[]{field.getName(), field.getType().toString(), field.isNotNull(), field.isPrimaryKey(), field.isPrimaryKey(), field.isUnique()});
             }
             
             refreshSqlPreview();
@@ -332,7 +333,7 @@ public class JDialogNewTable extends javax.swing.JDialog
             
         if (modifyTableMode)
         {
-            int result = JOptionPane.showConfirmDialog(this, "Modifying a table's structure will permanently delete any data from that table.\nAre you sure you want to continue? This action cannot be undone.", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+            int result = JOptionPane.showConfirmDialog(this, "Modifying a table's structure will permanently delete all data from that table.\nAre you sure you want to continue? This action cannot be undone.", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
             if(result == JOptionPane.YES_OPTION)
             {
                 DataHandler.dropTable(WORKING_PATH, sqlTable.getName());
@@ -345,7 +346,7 @@ public class JDialogNewTable extends javax.swing.JDialog
         try
         {
             DataHandler.createTable(WORKING_PATH, TextArea_SqlPreview.getText());
-            JOptionPane.showMessageDialog(this, message, "Create table", 1);
+            //JOptionPane.showMessageDialog(this, message, "Create table", 1);
             closeForm();
         }
         catch (SQLException e)
